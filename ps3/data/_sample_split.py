@@ -22,4 +22,23 @@ def create_sample_split(df, id_column, training_frac=0.8):
         Training data with sample column containing train/test split based on IDs.
     """
 
+    if isinstance(id_column, str):
+        id_column = [id_column]
+
+    keys = df[id_column].astype(str).agg("|".join, axis=1)
+
+    def get_bucket(key):
+        hash_value = hashlib.sha256(key.encode()).hexdigest()
+        return int(hash_value, 16) % 100
+
+    buckets = keys.apply(get_bucket)
+
+    df = df.copy()
+
+    df["sample"] = np.where(
+        buckets < training_frac * 100,
+        "train",
+        "test"
+    )
+
     return df
