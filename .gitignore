@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+
+# macOS
+.DS_Store
